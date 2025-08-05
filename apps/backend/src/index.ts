@@ -8,7 +8,6 @@ app.get("/", (req, res) => {
   res.send("hello");
 });
 app.post("/", async (req, res) => {
-  // Example: await prisma.name.findMany()
   const { name, age } = req.body;
   const create = await prisma.user.create({
     data: {
@@ -20,4 +19,4 @@ app.post("/", async (req, res) => {
   res.send(`User Created Successfully ${create.name}`);
 });
 
-app.listen(3000);
+app.listen(3001);
