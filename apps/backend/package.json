@@ -6,10 +6,11 @@
     "@types/bun": "latest"
   },
   "scripts": {
-    "dev": "bun run --watch ./src/index.ts",
-    "start": "bun run ./dist/index.js", 
+    "dev": "bun run ./src/index.ts",
+    "start": "bun run ./dist/index.js",
     "build": "bun build ./src/index.ts --outdir ./dist --target node",
-    "type-check": "bunx tsc --noEmit"
+    "type-check": "bunx tsc --noEmit",
+    "db:migrate": "cd ../../packages/prisma && bunx prisma generate"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -1,0 +1,20 @@
+FROM oven/bun:1
+
+WORKDIR /app
+
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl
+
+COPY package.json bun.lock turbo.json ./
+COPY packages/ ./packages/
+COPY apps/backend ./apps/backend
+
+RUN bun install
+
+RUN bun db:generate
+
+RUN bun run build
+
+EXPOSE 3001
+
+CMD ["bun", "run", "dev"]

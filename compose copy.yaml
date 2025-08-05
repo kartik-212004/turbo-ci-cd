@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=db
+      - POSTGRES_PASSWORD=2004
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:2004@db:5432/db
+    depends_on:
+      - backend
+      - db
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: backend
+    ports:
+      - "3001:3001"
+    environment: .env
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
