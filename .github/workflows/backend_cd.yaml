@@ -11,18 +11,15 @@ jobs:
 
     steps:
       - name: Clone repo
-      - uses: actions/checkout@v3
-        with:
-          bun-version: latest
+        uses: actions/checkout@v3
 
       - name: Setup Bun
-      - uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
       - name: Installing deps
-      - run: bun install
+        run: bun install
 
       - name: Build
-      - run: bun run build
-
+        run: bun run build
