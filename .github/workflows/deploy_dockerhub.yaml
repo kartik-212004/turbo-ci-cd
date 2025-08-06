@@ -24,20 +24,14 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/turbo-frontend:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/turbo-backend:latest
 
-      - name: Debug secrets (remove after testing)
-        run: |
-          echo "Host: ${{ secrets.CIVO_HOST }}"
-          echo "User: ${{ secrets.CIVO_USER }}"
-          echo "Password length: ${#CIVO_PASSWORD}"
-        env:
-          CIVO_PASSWORD: ${{ secrets.CIVO_PASSWORD }}
-
       - name: SSH into Civo and deploy
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.CIVO_HOST }}
           username: ${{ secrets.CIVO_USER }}
           password: ${{ secrets.CIVO_PASSWORD }}
+          port: 22
+          timeout: 60s
           script: |
             # Create project directory if it doesn't exist
             mkdir -p ~/turbo-app
