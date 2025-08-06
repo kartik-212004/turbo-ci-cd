@@ -31,7 +31,47 @@ jobs:
           username: ${{ secrets.CIVO_USER }}
           key: ${{ secrets.CIVO_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/turbo-frontend:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/turbo-backend:latest
-            cd /path/to/docker-compose-dir
+            # Create project directory if it doesn't exist
+            mkdir -p ~/turbo-app
+            cd ~/turbo-app
+            
+            # Create compose.yaml file on server
+            cat > compose.yaml << 'EOF'
+            services:
+              frontend:
+                image: kartik200421/turbo-frontend:latest
+                ports:
+                  - "3000:3000"
+                environment:
+                  - DATABASE_URL=postgresql://postgres:2004@db:5432/db
+                depends_on:
+                  - backend
+                  - db
+
+              backend:
+                image: kartik200421/turbo-backend:latest
+                ports:
+                  - "3001:3001"
+                environment:
+                  - DATABASE_URL=postgresql://postgres:2004@db:5432/db
+                depends_on:
+                  - db
+
+              db:
+                image: postgres:latest
+                container_name: database
+                environment:
+                  - POSTGRES_USER=postgres
+                  - POSTGRES_DB=db
+                  - POSTGRES_PASSWORD=2004
+                ports:
+                  - "5432:5432"
+                volumes:
+                  - postgres_data:/var/lib/postgresql/data
+
+            volumes:
+              postgres_data:
+            EOF
+            
+            # Start services (will automatically pull latest images)
             docker-compose up -d --remove-orphans
