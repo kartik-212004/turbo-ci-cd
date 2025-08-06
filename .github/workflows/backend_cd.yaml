@@ -18,6 +18,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Generate Prisma Client
+        run: bunx prisma generate
+
       - name: Installing deps
         run: bun install
 
