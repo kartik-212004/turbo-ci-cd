@@ -1,6 +1,6 @@
 FROM oven/bun:1
 
-WORKDIR /app
+WORKDIR /apps
 
 RUN apt-get update -y && apt-get install -y openssl
 
@@ -16,6 +16,6 @@ RUN bun run build
 
 EXPOSE 3000
 
-WORKDIR /app/apps/web
+WORKDIR apps/web
 
 CMD ["bun", "run", "start"]
