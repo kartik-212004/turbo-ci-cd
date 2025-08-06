@@ -2,7 +2,6 @@ FROM oven/bun:1
 
 WORKDIR /app
 
-# Install OpenSSL for Prisma
 RUN apt-get update -y && apt-get install -y openssl
 
 COPY package.json bun.lock turbo.json ./
