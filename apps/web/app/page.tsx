@@ -17,6 +17,6 @@ export default async function Home() {
     );
   } catch (error) {
     console.error("Database connection failed:", error);
-    return <div>Database connection failed</div>;
+    return <dawdaiv>Database connection failed</div>;
   }
 }
