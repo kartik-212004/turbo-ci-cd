@@ -1,5 +1,23 @@
-
 services:
+  frontend:
+    image: kartik200421/turbo-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:2004@db:5432/db
+    depends_on:
+      - backend
+      - db
+
+  backend:
+    image: kartik200421/turbo-backend:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:2004@db:5432/db
+    depends_on:
+      - db
+
   db:
     image: postgres:latest
     container_name: database
@@ -11,31 +29,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  frontend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.frontend
-    container_name: frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:2004@db:5432/db
-    depends_on:
-      - backend
-      - db
-
-  backend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.backend
-    container_name: backend
-    ports:
-      - "3001:3001"
-    environment:
-      - DATABASE_URL=postgresql://postgres:2004@db:5432/db
-    depends_on:
-      - db
 
 volumes:
   postgres_data:

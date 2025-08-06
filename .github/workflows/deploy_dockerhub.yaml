@@ -10,17 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: clone code
+      - name: Clone code
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/turbo:latest .
+      - name: Build all images using Compose
+        run: docker compose build
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/turbo:latest
+      - name: Push images to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/turbo-frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/turbo-backend:latest
 
       - name: SSH into Civo and deploy
         uses: appleboy/ssh-action@v0.1.6
@@ -29,5 +31,7 @@ jobs:
           username: ${{ secrets.CIVO_USER }}
           key: ${{ secrets.CIVO_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/turbo:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/turbo-frontend:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/turbo-backend:latest
+            cd /path/to/docker-compose-dir
             docker-compose up -d --remove-orphans
