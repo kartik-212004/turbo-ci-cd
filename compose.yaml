@@ -1,5 +1,8 @@
 services:
   frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
     image: kartik200421/turbo-frontend:latest
     ports:
       - "3000:3000"
@@ -10,6 +13,9 @@ services:
       - db
 
   backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
     image: kartik200421/turbo-backend:latest
     ports:
       - "3001:3001"
