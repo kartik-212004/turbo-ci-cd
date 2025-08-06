@@ -1,11 +1,16 @@
 import { prisma } from "db";
-import { user } from "@prisma/client"; 
+
+interface User {
+  name: string;
+  age: number;
+  id: number;
+}
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   try {
-    const users: user[] = await prisma.user.findMany(); 
+    const users: User[] = await prisma.user.findMany();
 
     return (
       <div>
