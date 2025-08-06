@@ -27,19 +27,4 @@ jobs:
       - name: Build
         run: bun run build
 
-  Deploy:
-    build:
-      runs-on: ubuntu-latest
 
-      steps:
-        - name: SSH to ec2
-          uses: appleboy/ssh-action@v0.1.6
-          with:
-            host: ${{ secrets.CIVO_HOST }}
-            username: ${{ secrets.CIVO_USER }}
-            key: ${{ secrets.CIVO_SSH_KEY }}
-            script: |
-              cd /home/${{ secrets.CIVO_USER }}/your-project-dir
-              git pull origin main
-              docker-compose pull
-              docker-compose up --build -d --remove-orphans
